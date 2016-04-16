@@ -1,19 +1,40 @@
 var express = require('express');
 var app = express();    
-var port = process.env.PORT || 8080; 
+var port = process.env.PORT || 8000; 
 var bodyParser = require('body-parser');
 var request = require('request');
-var serverId = 'SeifPass';
+var seifPassServerId = 'vera';
+var spawn = require('child_process').spawn;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
+
+request({
+    url: "http://localhost:8080/init",
+    method: "POST",
+    json: true,
+    body: {'serverId': seifPassServerId}
+}, function (error, response, body){
+    console.log(response);           
+});
+
+function validateUser(password){
+    // TODO: decrypt password (currently it travels over the wire unencrypted)    
+}
+    
+function createUser(username, password){
+    // TODO: decrypt password (currently it travels over the wire unencrypted)
+    blindedPassword = '';
+    hardenedPassword = eval(seifPassServerId, username, blindedPassword);
+    // TODO: store pas in db 
+}
     
 app.get('/signup', function(req, res) {
-  res.sendFile(__dirname + '/signup.html');
+    res.sendFile(__dirname + '/signup.html');
 });
 
 app.get('/signin', function(req, res) {
-  res.sendFile(__dirname + '/signin.html');
+    res.sendFile(__dirname + '/signin.html');
 });
 
 app.post('/signup', function(req, res) {               
@@ -31,8 +52,7 @@ app.post('/signup', function(req, res) {
     //     json: true,
     //     body: {'w': serverId}
     // }, function (error, response, body){
-    //     console.log(response);
-    //     // TODO: save user        
+    //     console.log(response);                
     // });
     
     res.sendFile(__dirname + '/signin.html');
