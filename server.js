@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();    
-var port = process.env.PORT || 8000; 
+var port = 8000; 
 var bodyParser = require('body-parser');
 var request = require('request');
 var seifPassServerId = 'vera';
@@ -9,14 +9,15 @@ var spawn = require('child_process').spawn;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
-request({
-    url: "http://localhost:8080/init",
-    method: "POST",
-    json: true,
-    body: {'serverId': seifPassServerId}
-}, function (error, response, body){
-    console.log(response);           
-});
+// NOTE: This is a one time process, in production this will not suffice
+// request({
+//     url: "http://localhost:8080/init",
+//     method: "POST",
+//     json: true,
+//     body: {'serverId': seifPassServerId}
+// }, function (error, response, body){
+//     console.log(response);           
+// });
 
 function validateUser(password){
     // TODO: decrypt password (currently it travels over the wire unencrypted)    
@@ -46,16 +47,33 @@ app.post('/signup', function(req, res) {
     console.log('email: ' + email);
     console.log('password: ' + password);
     
-    // request({
-    //     url: "http://localhost:3000/eval",
-    //     method: "POST",
-    //     json: true,
-    //     body: {'w': serverId}
-    // }, function (error, response, body){
-    //     console.log(response);                
-    // });
-    
-    res.sendFile(__dirname + '/signin.html');
+    // NOTE: I have no idea why, but I need to but those place holder values for child_process to call pyrelic
+    var process = spawn('python',['pyrelic/vpop.py', 'blind', password, 'placeholder', 'placeholder']);                                     
+           
+    process.stdout.on('data', function (data) {
+        var blindedPassword = data + ''; 
+        var res = blindedPassword.split('\n');
+        var rInv = res[0];
+        var xWrapped = res[1];
+        console.log('rInv: ' + rInv);
+        console.log('xWrapped: ' + xWrapped);                
+        
+        request({
+            url: "http://localhost:8080/eval",
+            method: "POST",
+            json: true,
+            body: {'serverId': seifPassServerId, 'username': username, 'blindedPassword': xWrapped}
+        }, function (error, response, body){
+            console.log(body);
+            
+            // unwrapY, deblind it, wrap it, and store it as users password in db
+            
+            
+            
+            // res.sendFile(__dirname + '/signin.html');                
+        });          
+        
+    });                 
 });
    
 app.post('/signin', function(req, res) {
