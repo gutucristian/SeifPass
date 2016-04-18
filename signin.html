@@ -25,15 +25,15 @@
                         </div>
                         
                         <div class="panel-body">
-                            <form>
+                            <form action="http://localhost:8000/signin" method="POST">
                                 <div class="form-group">
                                     <label for="inputUsername">Username</label>
-                                    <input type="text" class="form-control" id="inputUsername" placeholder="Cristian">
+                                    <input type="text" class="form-control" id="inputUsername" name="username" placeholder="Cristian">
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="inputPassword">Password</label>
-                                    <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                                    <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Password">
                                 </div> 
                                 
                                 <button class="btn btn-primary" type="submit">Sign in</button>                                   
