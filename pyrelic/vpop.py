@@ -7,9 +7,12 @@ transmitted.
 import sys
 from pbc import *
 from prf import *
+from bi import *
 
 functionToCall = sys.argv[1]
+#print('functionToCall: ' + functionToCall)
 arg1 = sys.argv[2]
+arg2 = sys.argv[3]
 
 def eval(w,t,m,msk,s):        
     """
@@ -125,7 +128,7 @@ def verify(x, t, y, pi, errorOnFail=True):
         return False
 
 
-def blind(m, hashfunc=hashG1):
+def blind(m, hashfunc=hashG1):    
     """
     Blinds an arbitrary string or byte array @m using an ephemeral key @r
     that can be used to deblind. Computes: x = H(x)^r
@@ -136,16 +139,14 @@ def blind(m, hashfunc=hashG1):
     while not rInv:
         r = randomZ()
         rInv = inverse(r, orderGt())
-
         
     x = (hashfunc(m) * r)
-     
-    print(rInv)
+
+    print(rInv.__long__())
     print(wrap(x))
     sys.stdout.flush()
     
     # return rInv, hashfunc(m) * r
-
 
 def deblind(rInv,y):
     """
@@ -157,6 +158,13 @@ def deblind(rInv,y):
     assertType(y, GtElement)
     return y ** rInv
 
+def test(rInv, y):                   
+    y = unwrapY(y)
+    z = deblind(long(rInv), y)
+    z = wrap(z)
+            
+    print(z)
+    sys.stdout.flush()
 
 # Decode/deserialize elements by name
 unwrapX = unwrapG1
@@ -167,3 +175,5 @@ unwrapU = unwrapLong
 
 if (functionToCall == "blind"):
     blind(arg1)
+elif (functionToCall == "test"):
+    test(arg1, arg2)

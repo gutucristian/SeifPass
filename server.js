@@ -34,6 +34,10 @@ app.get('/signup', function(req, res) {
     res.sendFile(__dirname + '/signup.html');
 });
 
+app.get('/manager', function(req, res) {
+    res.sendFile(__dirname + '/manager.html');
+});
+
 app.get('/signin', function(req, res) {
     res.sendFile(__dirname + '/signin.html');
 });
@@ -65,15 +69,24 @@ app.post('/signup', function(req, res) {
             body: {'serverId': seifPassServerId, 'username': username, 'blindedPassword': xWrapped}
         }, function (error, response, body){
             console.log(body);
+            var y = body.y;
             
-            // unwrapY, deblind it, wrap it, and store it as users password in db
+            // unwrapY, deblind it, wrap it, and store it as users password in db                        
             
+            console.log("--BEG HARDENING PROCESS--")
+            console.log("rInv:" + rInv);
+            console.log("y:" + y);                                   
             
-            
-            // res.sendFile(__dirname + '/signin.html');                
+            var process1 = spawn('python',['pyrelic/vpop.py', 'test', rInv, y, 'placeholder']);
+                        
+            process1.stdout.on('data', function (data) {
+                console.log('hardened pas: ' + data)
+            });
+                                                                       
         });          
         
     });                 
+   
 });
    
 app.post('/signin', function(req, res) {
