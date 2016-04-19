@@ -10,9 +10,6 @@ from prf import *
 from bi import *
 
 functionToCall = sys.argv[1]
-#print('functionToCall: ' + functionToCall)
-arg1 = sys.argv[2]
-arg2 = sys.argv[3]
 
 def eval(w,t,m,msk,s):        
     """
@@ -26,18 +23,7 @@ def eval(w,t,m,msk,s):
      where: y: intermediate result
             kw: secret key bound to w (needed for proof)
             tTilde: hashed tweak (needed for proof)
-    """   
-    # client will send m already blinded but since I am testing just blind it on server side     
-    r, x = blind(m)
-    print('x b44:' + str(x))                               
-    # since client will send x over the wire it will also be serialized   
-    x = wrap(x)
-    print('x b4:' + str(x))
-    print('xAfter: ' + str(unwrapX(x)))                                    
-     
-     
-    print('x: ' + str(xSerialized)) 
-                                      
+    """       
     # Construct the key
     kw = genKw(w,msk,s)                
     
@@ -46,21 +32,7 @@ def eval(w,t,m,msk,s):
     tTilde = hashG2(t)    
     y = pair(x*kw, tTilde)            
     
-    # server will wrap 
-    
-    # need to unwrap y ?                                       
-    #y = unwrapY(y)          
-        
-    z = deblind(r, y);                            
-        
-    # need to wrap z ?            
-    z = wrap(z)
-        
-    print ('z: ' + str(z))
-            
-    sys.stdout.flush()
-    
-    #return y,kw,tTilde
+    return y,kw,tTilde
 
 def prove(x,tTilde,kw,y):
     """
@@ -138,12 +110,10 @@ def blind(m, hashfunc=hashG1):
     rInv = None
     while not rInv:
         r = randomZ()
-        rInv = inverse(r, orderGt())
-        
-    x = (hashfunc(m) * r)
+        rInv = inverse(r, orderGt())            
 
     print(rInv.__long__())
-    print(wrap(x))
+    print(wrap(hashfunc(m) * r))
     sys.stdout.flush()
     
     # return rInv, hashfunc(m) * r
@@ -158,12 +128,10 @@ def deblind(rInv,y):
     assertType(y, GtElement)
     return y ** rInv
 
-def test(rInv, y):                   
-    y = unwrapY(y)
-    z = deblind(long(rInv), y)
-    z = wrap(z)
-            
-    print(z)
+def refine(rInv, y):                   
+    y = unwrapY(y)    
+    z = deblind(long(rInv), y)                    
+    print(str(z))
     sys.stdout.flush()
 
 # Decode/deserialize elements by name
@@ -174,6 +142,9 @@ unwrapC = unwrapLong
 unwrapU = unwrapLong
 
 if (functionToCall == "blind"):
+    arg1 = sys.argv[2]
     blind(arg1)
-elif (functionToCall == "test"):
-    test(arg1, arg2)
+elif (functionToCall == "refine"):
+    arg1 = sys.argv[2]
+    arg2 = sys.argv[3]
+    refine(arg1, arg2)
