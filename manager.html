@@ -26,12 +26,37 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li data-toggle="modal" data-target="#newModal"><a href="#"><span class="glyphicon glyphicon-plus"></span> New</a></li>
                         <li data-toggle="modal" data-target="#deleteModal"><a href="#"><span class="glyphicon glyphicon-remove"></span> Delete</a></li>
-                        <form action="http://localhost:8000/logout" method="POST"><li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li></form>                        
+                        <li data-toggle="modal" data-target="#logoutModal"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>                        
                     </ul>
                 </div>
             </nav>                                               
         </div>        
         <div class="col-md-3"></div> 
+       
+       <!--Log out Modal-->
+        <div id="logoutModal" class="modal fade" tabindex="-1" role="dialog">                
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Log out</h4>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <form action="http://localhost:8000/logout" method="POST">
+                            <div class="alert alert-warning" role="alert">
+                                <strong>Warning:</strong> your session will be killed!
+                            </div>
+                                                        
+                            <button class="btn btn-danger btn-block" type="submit">Sign up</button>     
+                        </form>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>                        
+        </div>
         
         <!--New Modal-->
         <div id="newModal" class="modal fade" tabindex="-1" role="dialog">                

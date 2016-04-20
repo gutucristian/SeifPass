@@ -7,20 +7,35 @@ var express = require('express'),
     spawn = require("child_process").spawn,    
     assert = require('assert'),
     request = require('request'),
-    seifPassServerId = 'SeifPass';
+    seifPassServerId = 'SeifPass',
+    session = require('express-session');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 
-// request({
-//     url: "http://localhost:8080/init",
-//     method: "POST",
-//     json: true,
-//     body: {'serverId': seifPassServerId}
-// }, function (error, response, body){
-//     console.log(response);           
-// });
+app.use(session({
+    secret: "This is a secret"
+}));
+
+request({
+    url: "http://localhost:8080/init",
+    method: "POST",
+    json: true,
+    body: {'serverId': seifPassServerId}
+}, function (error, response, body){
+    console.log(response);           
+});
+
+function checkAuth(req, res, next) {
+    console.log('check auth called')
+    if (!req.session.user_id) {
+        res.send('You are not authorized to view this page');
+    } else {  
+        res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');      
+        next();
+    }
+}
 
 function hardenPassword(username, password, callback){  
     
@@ -81,27 +96,37 @@ MongoClient.connect(url, function(err, db){
             
         });                     
     
-    });         
+    });   
        
     app.post('/signin', function(req, res) {                        
+        
+        var tReq = req;
+        var tRes = res; 
         var username = req.body.username;        
         var password = req.body.password;                    
     
-        function validateUser(tempPas) {            
-            
-            db.collection('users').findOne({'username': username}, function(err, user){                                
-                if(user.password == tempPas){
-                    // req.session.user_id = username;
-                    res.sendFile(__dirname + '/manager.html');
+        function redirect(forward){
+            if(forward){                
+                tReq.session.user_id = tReq.body.username;
+                tRes.redirect('/manager');
+            }else{
+                tRes.send('bad pass');
+            }
+        }
+        
+        function validateUser(tempPas) {                                    
+             
+            db.collection('users').findOne({'username': username}, function(err, user){
+                if(user.password == tempPas){                                                            
+                    redirect(true);                    
                 }else{
-                    res.send('bad pass');
+                    redirect(false);
                 } 
             });                        
             
         }
     
-        db.collection('users').findOne({'username': username}, function(err, user){                                                            
-            
+        db.collection('users').findOne({'username': username}, function(err, user){                                                                        
             if(user){                                
                 console.log('user found in db')                                
                 
@@ -117,6 +142,10 @@ MongoClient.connect(url, function(err, db){
     });
     
 });
+
+app.get('/manager', checkAuth, function(req, res){        
+    res.sendFile(__dirname + '/manager.html');
+});
     
 app.get('/signup', function(req, res) {
     res.sendFile(__dirname + '/signup.html');
@@ -124,6 +153,11 @@ app.get('/signup', function(req, res) {
 
 app.get('/signin', function(req, res) {
     res.sendFile(__dirname + '/signin.html');
+});
+   
+app.post('/logout', function(req, res){    
+    delete req.session.user_id;
+    res.redirect('/signin');
 });
     
 app.listen(port);
