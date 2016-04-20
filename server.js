@@ -9,23 +9,27 @@ var express = require('express'),
     request = require('request'),
     seifPassServerId = 'SeifPass',
     session = require('express-session');
+    //engine = require('consolidate');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static(__dirname + '/public'));
+app.use('/public', express.static(__dirname + '/public'));
+// app.engine('html', engine.nunjucks);
+// app.set('view engine', 'html');
+// app.set('views', __dirname + '/public');
 
 app.use(session({
     secret: "This is a secret"
 }));
 
-request({
-    url: "http://localhost:8080/init",
-    method: "POST",
-    json: true,
-    body: {'serverId': seifPassServerId}
-}, function (error, response, body){
-    console.log(response);           
-});
+// request({
+//     url: "http://localhost:8080/init",
+//     method: "POST",
+//     json: true,
+//     body: {'serverId': seifPassServerId}
+// }, function (error, response, body){
+//     console.log(response);           
+// });
 
 function checkAuth(req, res, next) {
     console.log('check auth called')
@@ -141,18 +145,40 @@ MongoClient.connect(url, function(err, db){
     
     });
     
+    app.post('/add_password', function(req, res){        
+        console.log('new password request: ' + req.body.password);
+        console.log('username: ' + req.session.user_id);
+        console.log('account: ' + req.body.account);
+        
+        var username = req.session.user_id;
+        var account = req.body.account;
+        var password = req.body.password;        
+        
+        function addPasToDb(password){
+            db.collection("users").update({"username": username}, {$push: {"passwords": {"account": account, "password": password}}})    
+        }                
+        
+        hardenPassword(username, password, function(y) {
+            addPasToDb(y);         
+        });
+        
+        res.send('password received')
+    });
+    
+    //db.users.update({"username": "aa"}, {$pull: {'passwords': {account: "Skype"}}})
+    
 });
 
 app.get('/manager', checkAuth, function(req, res){        
-    res.sendFile(__dirname + '/manager.html');
+    res.sendFile(__dirname + '/public/manager.html');
 });
     
 app.get('/signup', function(req, res) {
-    res.sendFile(__dirname + '/signup.html');
+    res.sendFile(__dirname + '/public/signup.html');
 });
 
 app.get('/signin', function(req, res) {
-    res.sendFile(__dirname + '/signin.html');
+    res.sendFile(__dirname + '/public/signin.html');
 });
    
 app.post('/logout', function(req, res){    

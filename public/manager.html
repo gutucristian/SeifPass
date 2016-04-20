@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">               
         
         <!-- Custom styles for this template -->
-        <link href="manager.css" rel="stylesheet">                                                
+        <link href="public/manager.css" rel="stylesheet">                                                
     </head>
     
     <body>        
@@ -47,7 +47,7 @@
                                 <strong>Warning:</strong> your session will be killed!
                             </div>
                                                         
-                            <button class="btn btn-danger btn-block" type="submit">Sign up</button>     
+                            <button class="btn btn-danger btn-block" type="submit">Log out</button>     
                         </form>
                     </div>
                     
@@ -78,9 +78,9 @@
                                 <input type="text" class="form-control" id="inputPassword">
                             </div> 
                             
-                            <button type="button" class="btn btn-primary btn-block">Generate</button>
-                            <button type="button" class="btn btn-warning btn-block">Edit</button>
-                            <button type="button" class="btn btn-success btn-block">Save</button>
+                            <button type="button" id="generate" class="btn btn-primary btn-block">Generate</button>
+                            <button type="button" id="edit" class="btn btn-warning btn-block">Edit</button>
+                            <button type="button" id="save" class="btn btn-success btn-block">Save</button>
                         </form>
                     </div>
                     
@@ -120,9 +120,11 @@
                 </div>
             </div>                        
         </div>
-                
+        
+        <!--load jquery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>        
         <!-- Latest compiled and minified JavaScript -->        
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>                             
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <script src="public/manager.js"></script>                               
     </body>
 </html>
