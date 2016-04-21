@@ -49,5 +49,27 @@ $( document ).ready(function() {
         }else{
             console.log('input a password');
         }        
-    }); 
+    });
+    
+    $("#delete").on("click",function() {
+        var accountName =  $("#accountToDelete").val();
+        console.log('delete clicked');
+        if(accountName != ""){
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8000/delete_password",                
+                dataType: "json",                       
+                data: {"accountName": accountName},
+                success: function(data){
+                    console.log(data);
+                },
+                failure: function(errMsg) {
+                    console.log(errMsg);
+                }
+            });            
+        }else{
+            console.log('input an account to delete');
+        }
+    });
+ 
 });

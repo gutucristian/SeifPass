@@ -175,9 +175,11 @@ MongoClient.connect(url, function(err, db){
                 
     });
     
-    // app.post('/delete_password', function(req, res){
-        
-    // });    
+    app.post('/delete_password', function(req, res){
+        console.log('delete password called');
+        db.collection('users').update({"username": req.session.user_id}, {$pull: {'accounts': {name: req.body.accountName}}})
+        res.send('password deleted');
+    });    
 });
     
 app.get('/signup', function(req, res) {
