@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>SeifPass - Manager</title>
+        
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">               
+        
+        <!-- Custom styles for this template -->
+        <link href="views/public/manager.css" rel="stylesheet">                                                
+    </head>
+    
+    <body>        
+        <div class="col-md-3"></div>        
+        
+        <div class="col-md-6">
+            <nav class="navbar navbar-inverse">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">SeifPass</a>
+                    </div>
+                    
+                    <ul class="nav navbar-nav navbar-right">
+                        <li data-toggle="modal" data-target="#newModal"><a href="#"><span class="glyphicon glyphicon-plus"></span> New</a></li>
+                        <li data-toggle="modal" data-target="#deleteModal"><a href="#"><span class="glyphicon glyphicon-remove"></span> Delete</a></li>
+                        <li data-toggle="modal" data-target="#logoutModal"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>                        
+                    </ul>
+                </div>                                
+            </nav>    
+            
+            <div class="list-group">
+                {% for user in users %}                 
+                    {% for account in user.accounts %}
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{ account.name }}</h3>
+                            </div>
+                            <div class="panel-body">
+                                Password: {{ account.password }}
+                            </div>
+                        </div>                        
+                    {% endfor %}                    
+                {% endfor %}
+            </div>                                           
+        </div>
+                
+        <div class="col-md-3"></div> 
+       
+       <!--Log out Modal-->
+        <div id="logoutModal" class="modal fade" tabindex="-1" role="dialog">                
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Log out</h4>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <form action="http://localhost:8000/logout" method="POST">
+                            <div class="alert alert-warning" role="alert">
+                                <strong>Warning:</strong> your session will be killed!
+                            </div>
+                                                        
+                            <button class="btn btn-danger btn-block" type="submit">Log out</button>     
+                        </form>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>                        
+        </div>
+        
+        <!--New Modal-->
+        <div id="newModal" class="modal fade" tabindex="-1" role="dialog">                
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">New password</h4>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="inputAccount">Account</label>
+                                <input type="text" class="form-control" id="inputAccount" placeholder="Google">
+                            </div>                                                                
+                            
+                            <div class="form-group">
+                                <label for="inputPassword">Generated password</label>
+                                <input type="text" class="form-control" id="inputPassword">
+                            </div> 
+                            
+                            <button type="button" id="generate" class="btn btn-primary btn-block">Generate</button>
+                            <button type="button" id="edit" class="btn btn-warning btn-block">Edit</button>
+                            <button type="button" id="save" class="btn btn-success btn-block">Save</button>
+                        </form>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>                        
+        </div>
+        
+        <!--Delete Modal-->
+        <div id="deleteModal" class="modal fade" tabindex="-1" role="dialog">                
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Delete password</h4>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="inputAccount">Account</label>
+                                <input type="text" class="form-control" id="inputAccount" placeholder="Tribal Wars">
+                            </div>                                                                
+                            
+                            <div class="alert alert-warning" role="alert">
+                                <strong>Warning:</strong> once you delete a password, there is no going back!
+                            </div>
+                            
+                            <button type="button" class="btn btn-danger btn-block">Delete</button>
+                        </form>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>                        
+        </div>
+        
+        <!--load jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>        
+        <!-- Latest compiled and minified JavaScript -->        
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <script src="views/public/manager.js"></script>                               
+    </body>
+</html>

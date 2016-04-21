@@ -9,14 +9,14 @@ var express = require('express'),
     request = require('request'),
     seifPassServerId = 'SeifPass',
     session = require('express-session');
-    //engine = require('consolidate');
+    engine = require('consolidate');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use('/public', express.static(__dirname + '/public'));
-// app.engine('html', engine.nunjucks);
-// app.set('view engine', 'html');
-// app.set('views', __dirname + '/public');
+app.use('/views/public', express.static(__dirname + '/views/public'));
+app.engine('html', engine.nunjucks);
+app.set('view engine', 'html');
+app.set('public', __dirname + '/public');
 
 app.use(session({
     secret: "This is a secret"
@@ -145,17 +145,17 @@ MongoClient.connect(url, function(err, db){
     
     });
     
-    app.post('/add_password', function(req, res){        
+    app.post('/addPassword', function(req, res){        
         console.log('new password request: ' + req.body.password);
         console.log('username: ' + req.session.user_id);
-        console.log('account: ' + req.body.account);
+        console.log('account: ' + req.body.accountName);
         
         var username = req.session.user_id;
-        var account = req.body.account;
+        var accountName = req.body.accountName;
         var password = req.body.password;        
         
         function addPasToDb(password){
-            db.collection("users").update({"username": username}, {$push: {"passwords": {"account": account, "password": password}}})    
+            db.collection("users").update({"username": username}, {$push: {"accounts": {"name": accountName, "password": password}}})    
         }                
         
         hardenPassword(username, password, function(y) {
@@ -164,21 +164,28 @@ MongoClient.connect(url, function(err, db){
         
         res.send('password received')
     });
-    
-    //db.users.update({"username": "aa"}, {$pull: {'passwords': {account: "Skype"}}})
-    
-});
+        
+    app.get('/manager', checkAuth, function(req, res){
 
-app.get('/manager', checkAuth, function(req, res){        
-    res.sendFile(__dirname + '/public/manager.html');
+        //console.log('req.session.user_id: ' + req.session.user_id);
+        
+        db.collection('users').find({"username": req.session.user_id}).toArray(function(err, docs){
+            res.render('public/manager.html', {'users': docs});
+        });                
+                
+    });
+    
+    // app.post('/delete_password', function(req, res){
+        
+    // });    
 });
     
 app.get('/signup', function(req, res) {
-    res.sendFile(__dirname + '/public/signup.html');
+    res.sendFile(__dirname + '/views/public/signup.html');
 });
 
 app.get('/signin', function(req, res) {
-    res.sendFile(__dirname + '/public/signin.html');
+    res.sendFile(__dirname + '/views/public/signin.html');
 });
    
 app.post('/logout', function(req, res){    
