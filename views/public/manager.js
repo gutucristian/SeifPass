@@ -28,7 +28,7 @@ $( document ).ready(function() {
     
     $("#save").on("click",function() {
         // TODO: encrypt password before sending to server
-        console.log('save clicked');
+        console.log('save clicked');        
         var password = $("#inputPassword").val();
         var accountName =  $("#inputAccount").val();
         console.log('password = ' + password);
@@ -40,10 +40,12 @@ $( document ).ready(function() {
                 dataType: "json",                       
                 data: {"accountName": accountName, "password": password},
                 success: function(data){
-                    console.log(data);
-                },
-                failure: function(errMsg) {
-                    console.log(errMsg);
+                    console.log('success');
+                    $( ".new-modal-modal-body" ).append("<div class=\"new-modal-action-info\"><div class=\"alert alert-success\"><strong>Success!</strong> Password was added.<strong> Refresh page to see update.</strong></div></div>");
+                    setTimeout(function() {
+                        console.log('time out called');
+                        $(".new-modal-action-info").remove();                        
+                    }, 3000);
                 }
             });            
         }else{
@@ -61,10 +63,11 @@ $( document ).ready(function() {
                 dataType: "json",                       
                 data: {"accountName": accountName},
                 success: function(data){
-                    console.log(data);
-                },
-                failure: function(errMsg) {
-                    console.log(errMsg);
+                    $(".delete-modal-modal-body").append("<div class=\"delete-modal-action-info\"><div class=\"alert alert-success\"><strong>Success!</strong> Password was deleted.<strong> Refresh page to see update.</strong></div></div>");
+                    setTimeout(function() {
+                        console.log('time out called');
+                        $(".delete-modal-action-info").remove();
+                    }, 3000);
                 }
             });            
         }else{

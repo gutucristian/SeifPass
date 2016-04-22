@@ -162,7 +162,7 @@ MongoClient.connect(url, function(err, db){
             addPasToDb(y);         
         });
         
-        res.send('password received')
+        res.send({"message": "password added"});
     });
         
     app.get('/manager', checkAuth, function(req, res){
@@ -178,7 +178,7 @@ MongoClient.connect(url, function(err, db){
     app.post('/delete_password', function(req, res){
         console.log('delete password called');
         db.collection('users').update({"username": req.session.user_id}, {$pull: {'accounts': {name: req.body.accountName}}})
-        res.send('password deleted');
+        res.send({"message": "password deleted"});
     });    
 });
     
