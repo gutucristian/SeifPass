@@ -25,3 +25,10 @@
 2 - Minor features, major bug fixes, etc.
 
 3 - Minor bugs, spelling mistakes, etc.
+
+To Build:
+
+Install MongoDB and run `mongod`. Create a collection called seif and one called SeifPass. Initiate Pythia PRF init command to register with remote crypto service seif.
+
+`db.createCollection('seif')
+db.createCollection('SeifPass')`
