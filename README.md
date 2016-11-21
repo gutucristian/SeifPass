@@ -8,10 +8,10 @@
 - [x] sessions prevent user from accessing a restricted page, logging out, and then using the back button to access the restricted page again
 
 ### v1.1.0
-- [ ] make a home page
+- [x] make a home page
 - [ ] alphabetize passwords
-- [ ] redirect user to sign in page for bad user/pass
-- [ ] hash password before it gets sent over network
+- [x] redirect user to sign in page for bad user/pass
+- [x] hash password before it gets sent over network
 
 ### v1.1.0
 - [ ] update entire db by requesting `k'` from seif service
