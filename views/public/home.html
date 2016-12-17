@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>SeifPass Home</title>
+  <link href="views/public/home.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="heading">
+        <h1>SeifPass Password Manager</h1>
+    </div>
+    <table class="content" style="width: 50%">
+        <tr>
+            <th><a href="http://localhost:8000/signup">Create Account</a></th>
+            <th><a href="http://localhost:8000/signin">Sign in</a></th> 
+            <th>About</th>
+        </tr>            
+    </table>
+    <br>
+    <table class="content" style="color: white;">
+        <tr>
+            <th style="text-align: center;">About SeifPass</th>            
+        </tr>
+        <tr>
+            <td>
+                Passwords are common. We use them everyday to authenticate to devices and online services. Despite their importance, the way we store passwords is fundamentally broken. Often times, password databases get compromised and when they get compromised they are vulnerable to “offline attacks.” Ideally, we want to encrypt passwords in such a way that if the password database gets compromised the passwords remain secure. This is possible by implementing a password encryption system in which trust is distributed amongst multiple machines. This is nice because if one machine gets compromised but not the other the attacker has insufficient information to conduct an offline attack. Pythia is a password encryption protocol which inherits this idea of distributing trust. Pythia also exposes enough information for us to be able to detect online attacks, rotate the encryption key and, as a result, conduct remote cryptographic erasure of compromised databases. While powerful, Pythia still has its limitations. Namely, it may be hard for large companies like Google, Facebook, and Microsoft to implement it in an already sophisticated code base. Ultimately, not all companies are guaranteed to implement Pythia in their systems. This sets the user at a disadvantage. SeifPass, is a secure password manager which implements Pythia on behalf of such companies. SeifPass allows users to be proactive - they do not need to depend on anyone to secure their passwords the right way.
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table class="content" style="color: white;">
+        <tr>
+            <th style="text-align: center;">Useful links</th>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li>Pythia PRF Protocol</li>
+                    <li>PyRelic</li>
+                    <li>Python Pythia PRF Implementation</li>
+                    <li>Seif</li>                                         
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    <footer>
+        <p>Cristian Gutu</p>
+        <a href="https://github.com/gutucristian"><img src="views/public/github.png" /></a>
+    </footer>    
+</body>
+
+</html> 

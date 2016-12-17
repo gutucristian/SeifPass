@@ -114,7 +114,7 @@ MongoClient.connect(url, function(err, db){
                 tReq.session.user_id = tReq.body.username;
                 tRes.redirect('/manager');
             }else{
-                tRes.send('bad pass');
+                tRes.redirect('/signin');
             }
         }
         
@@ -181,7 +181,11 @@ MongoClient.connect(url, function(err, db){
         res.send({"message": "password deleted"});
     });    
 });
-    
+
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/views/public/home.html');
+});
+
 app.get('/signup', function(req, res) {
     res.sendFile(__dirname + '/views/public/signup.html');
 });

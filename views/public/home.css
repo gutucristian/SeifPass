@@ -1,0 +1,38 @@
+body {
+    font-family: "Courier New", Courier, monospace;
+    background-color: #1a1a1a;
+    color: #d59120;    
+}
+
+.heading {
+    margin: auto;
+    width: 60%;    
+    padding: 10px;
+    text-align: center;
+}
+
+.content {
+    margin: auto;
+    width: 60%;    
+    background-color: #262626;
+    border: 3px solid #333333;
+    color: #8f8f8f;
+}
+
+a {
+    color: #8f8f8f;
+    text-decoration: none;    
+}
+
+a:hover {
+    color:darkred;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+footer {
+    text-align: center;    
+}

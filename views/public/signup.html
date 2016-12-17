@@ -25,7 +25,7 @@
                         </div>
                         
                         <div class="panel-body">
-                            <form action="http://localhost:8000/signup" method="POST">                                
+                            <form action="http://localhost:8000/signup" id="myForm" method="POST">                                
                                 <div class="form-group">
                                     <label for="inputUsername">Username</label>
                                     <input type="text" class="form-control" id="inputUsername" name="username" placeholder="Cristian">
@@ -52,10 +52,24 @@
                 </div>                
                 <div class="col-md-4"></div>
             </div>
-        </div>   
-        
+        </div>        
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
         <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>     
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <script>                 
+            function hash(s){
+                return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);              
+            }        
+
+            $("#myForm").submit(function(){
+                pas = document.getElementById('inputPassword').value;
+                document.getElementById('inputPassword').value = hash(pas);
+                console.log('pas: ' + pas);
+                console.log('hashPas: ' + hashPas);
+                return True;
+            });
+
+        </script>     
     </body>
 </html>
