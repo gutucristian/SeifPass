@@ -32,7 +32,6 @@ app.use(session({
 // });
 
 function checkAuth(req, res, next) {
-    console.log('check auth called')
     if (!req.session.user_id) {
         res.send('You are not authorized to view this page');
     } else {  
@@ -44,8 +43,8 @@ function checkAuth(req, res, next) {
 function hardenPassword(username, password, callback){  
     
     console.log('Harden Password:')
-    console.log('username: ' + username);
-    console.log('password: ' + password);
+    console.log('\tusername (t): ' + username);
+    console.log('\tpassword (hashed for wire transfer): ' + password);
         
     var process = spawn('python',["pyrelic/vpop.py", "blind", password]);        
     
@@ -56,8 +55,8 @@ function hardenPassword(username, password, callback){
         var rInv = res[0];
         var blindedPassword = res[1]; // it is also serialized        
         
-        console.log('rInv: ' + rInv);
-        console.log('blinded password: ' + blindedPassword);
+        //console.log('rInv: ' + rInv);
+        console.log('\tblinded password (x): ' + blindedPassword);
         
         // obtain harden password (y) from seif prf service
         request({
@@ -69,14 +68,14 @@ function hardenPassword(username, password, callback){
             // unwrap y, deblind it, and wrap it            
             var y = body.y;                                                            
             
-            console.log('\nhardened password: ' + y)            
+            console.log('\nhardened password (y): ' + y)            
             
             var process1 = spawn('python',["pyrelic/vpop.py", "refine", rInv, y]);
                         
             process1.stdout.on('data', function (data) {
                 var y = data + '';
                                 
-                console.log('(refined) hardened password: ' + y)                                
+                console.log('refined hardened password (z): ' + y)                                
                                 
                 callback(y);
             });                                                                       
@@ -145,10 +144,11 @@ MongoClient.connect(url, function(err, db){
     
     });
     
-    app.post('/addPassword', function(req, res){        
-        console.log('new password request: ' + req.body.password);
-        console.log('username: ' + req.session.user_id);
-        console.log('account: ' + req.body.accountName);
+    app.post('/addPassword', function(req, res){ 
+        console.log('add password:')       
+        console.log('\tnew password request: ' + req.body.password);
+        console.log('\tusername: ' + req.session.user_id);
+        console.log('\taccount: ' + req.body.accountName);
         
         var username = req.session.user_id;
         var accountName = req.body.accountName;
